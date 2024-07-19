@@ -1,15 +1,34 @@
 <template>
   <div id="app">
-    <RemindersList />
+    <button type="button" class="btn btn-primary" @click="showModal = true">
+      Adicionar Novo Lembrete
+    </button>
+    <AddReminder v-if="showModal" @reminder-added="fetchReminders" @close="showModal = false" />
+    <ReminderList ref="remindersList" />
   </div>
 </template>
 
 <script>
-import RemindersList from './components/ReminderList.vue';
+import ReminderList from './components/ReminderList.vue';
+import AddReminder from './components/AddReminder.vue';
 
 export default {
   components: {
-    RemindersList
+    ReminderList,
+    AddReminder
+  },
+  data() {
+    return {
+      showModal: false
+    };
+  },
+  methods: {
+    fetchReminders() {
+      // Verifica se o componente ReminderList está disponível antes de chamar o método
+      if (this.$refs.remindersList) {
+        this.$refs.remindersList.fetchReminders();
+      }
+    }
   }
 };
 </script>

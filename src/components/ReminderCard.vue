@@ -11,6 +11,8 @@
 </template>
 
 <script>
+import axios from 'axios'; 'axios'
+
 export default {
     props: {
         reminder: Object
@@ -22,8 +24,18 @@ export default {
         }
     },
     methods: {
-        sendReminder() {
-            alert(`Enviar lembrete para ${this.reminder.phoneNumber}`);
+        async sendReminder() {
+            try {
+                await axios.post('http://localhost:8080/api/send-message', {
+                    message: this.reminder.message,
+                    phoneNumber: this.reminder.phoneNumber,
+                    character: this.reminder.mood // Supondo que o `character` será usado no backend
+                });
+                alert('Mensagem enviada com sucesso');
+            } catch (error) {
+                console.error('Erro ao enviar mensagem:', error);
+                alert('Falha ao enviar mensagem');
+            }
         }
     }
 };

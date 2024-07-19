@@ -1,9 +1,5 @@
 <template>
     <div>
-        <button type="button" class="btn btn-primary" @click="showModal = true">
-            Adicionar Lembrete
-        </button>
-
         <div v-if="showModal" class="modal fade show" tabindex="-1" style="display: block;"
             aria-labelledby="addReminderModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -16,36 +12,32 @@
                         <form @submit.prevent="submitReminder">
                             <div class="mb-3">
                                 <label for="message" class="form-label">Mensagem:</label>
-                                <input v-model="message" id="message" type="text" class="form-control" required>
+                                <input v-model="message" id="message" type="text" class="form-control" required />
                             </div>
-
                             <div class="mb-3">
                                 <label for="phoneNumber" class="form-label">Número de Telefone:</label>
-                                <input v-model="phoneNumber" id="phoneNumber" type="text" class="form-control" required>
+                                <input v-model="phoneNumber" id="phoneNumber" type="text" class="form-control"
+                                    required />
                             </div>
-
                             <div class="mb-3">
                                 <label for="dateTime" class="form-label">Data e Hora:</label>
                                 <input v-model="dateTime" id="dateTime" type="datetime-local" class="form-control"
-                                    required>
+                                    required />
                             </div>
-
                             <div class="mb-3">
                                 <label for="mood" class="form-label">Humor:</label>
-                                <select v-model="mood" id="mood" class="form-select">
+                                <select v-model="mood" id="mood" class="form-select" required>
                                     <option value="bobEsponja">Bob Esponja</option>
                                     <option value="seuSirigueijo">Seu Sirigueijo</option>
                                     <option value="darthVader">Darth Vader</option>
                                 </select>
                             </div>
-
                             <button type="submit" class="btn btn-primary">Adicionar Lembrete</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
-
         <div v-if="showModal" class="modal-backdrop fade show" @click="closeModal"></div>
     </div>
 </template>
@@ -60,12 +52,12 @@ export default {
             phoneNumber: '',
             dateTime: '',
             mood: '',
-            showModal: false
+            showModal: true
         };
     },
     methods: {
         closeModal() {
-            this.showModal = false;
+            this.$emit('close');
         },
         async submitReminder() {
             try {
@@ -75,13 +67,12 @@ export default {
                     dateTime: this.dateTime,
                     mood: this.mood
                 });
-                alert('Lembrete adicionado com sucesso');
+                this.$emit('reminder-added');
                 this.message = '';
                 this.phoneNumber = '';
                 this.dateTime = '';
                 this.mood = '';
-                this.showModal = false;
-                this.$emit('reminder-added');
+                this.closeModal();
             } catch (error) {
                 console.error('Houve um erro ao adicionar o lembrete:', error);
             }
@@ -89,20 +80,3 @@ export default {
     }
 };
 </script>
-
-<style scoped>
-.modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1040;
-}
-
-.modal {
-    display: block;
-    z-index: 1050;
-}
-</style>
