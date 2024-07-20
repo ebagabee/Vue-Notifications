@@ -3,38 +3,44 @@
         <div class="card-body">
             <h5 class="card-title">{{ reminder.message }}</h5>
             <p class="card-text">Número: {{ reminder.phoneNumber }}</p>
-            <p class="card-text">Data e Hora: {{ formattedDateTime }}</p>
             <p class="card-text">Humor: {{ reminder.mood }}</p>
-            <button class="btn btn-primary" @click="sendReminder">Enviar</button>
+            <div class="btn-container">
+                <button class="btn btn-primary" @click="sendReminder">Enviar</button>
+                <button class="btn btn-danger" @click="deleteReminder">Excluir</button>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-import axios from 'axios'; 'axios'
+import axios from 'axios';
 
 export default {
     props: {
         reminder: Object
     },
-    computed: {
-        formattedDateTime() {
-            const date = new Date(this.reminder.dateTime);
-            return date.toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
-        }
-    },
     methods: {
         async sendReminder() {
             try {
-                await axios.post('http://localhost:8080/api/send-message', {
+                await axios.post('http://localhost:8000/api/send-reminder', {
                     message: this.reminder.message,
                     phoneNumber: this.reminder.phoneNumber,
-                    character: this.reminder.mood // Supondo que o `character` será usado no backend
+                    character: this.reminder.mood
                 });
                 alert('Mensagem enviada com sucesso');
             } catch (error) {
                 console.error('Erro ao enviar mensagem:', error);
                 alert('Falha ao enviar mensagem');
+            }
+        },
+        async deleteReminder() {
+            try {
+                await axios.delete(`http://localhost:8000/api/reminder/${this.reminder.id}`);
+                this.$emit('reminder-deleted', this.reminder.id);
+                alert('Lembrete excluído com sucesso');
+            } catch (error) {
+                console.error('Erro ao excluir lembrete:', error);
+                alert('Falha ao excluir lembrete');
             }
         }
     }
@@ -50,5 +56,11 @@ export default {
 
 .card-body {
     padding: 15px;
+}
+
+.btn-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
 }
 </style>

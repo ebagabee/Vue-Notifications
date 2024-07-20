@@ -4,7 +4,8 @@
             <p>Não há lembretes para mostrar.</p>
         </div>
         <div v-else>
-            <ReminderCard v-for="reminder in reminders" :key="reminder.id" :reminder="reminder" />
+            <ReminderCard v-for="reminder in reminders" :key="reminder.id" :reminder="reminder"
+                @reminder-deleted="removeReminder" />
         </div>
     </div>
 </template>
@@ -25,11 +26,14 @@ export default {
     methods: {
         async fetchReminders() {
             try {
-                const response = await axios.get('http://localhost:8080/api/reminders');
-                this.reminders = response.data;
+                const response = await axios.get('http://localhost:8000/api/reminders');
+                this.reminders = response.data.reminders;
             } catch (error) {
                 console.error('Houve um erro ao buscar lembretes:', error);
             }
+        },
+        removeReminder(id) {
+            this.reminders = this.reminders.filter(reminder => reminder.id !== id);
         }
     },
     mounted() {

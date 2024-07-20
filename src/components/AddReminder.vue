@@ -20,11 +20,6 @@
                                     required />
                             </div>
                             <div class="mb-3">
-                                <label for="dateTime" class="form-label">Data e Hora:</label>
-                                <input v-model="dateTime" id="dateTime" type="datetime-local" class="form-control"
-                                    required />
-                            </div>
-                            <div class="mb-3">
                                 <label for="mood" class="form-label">Humor:</label>
                                 <select v-model="mood" id="mood" class="form-select" required>
                                     <option value="bobEsponja">Bob Esponja</option>
@@ -50,7 +45,6 @@ export default {
         return {
             message: '',
             phoneNumber: '',
-            dateTime: '',
             mood: '',
             showModal: true
         };
@@ -61,16 +55,14 @@ export default {
         },
         async submitReminder() {
             try {
-                await axios.post('http://localhost:8080/api/reminder', {
+                await axios.post('http://localhost:8000/api/reminder', {
                     message: this.message,
                     phoneNumber: this.phoneNumber,
-                    dateTime: this.dateTime,
                     mood: this.mood
                 });
                 this.$emit('reminder-added');
                 this.message = '';
                 this.phoneNumber = '';
-                this.dateTime = '';
                 this.mood = '';
                 this.closeModal();
             } catch (error) {
