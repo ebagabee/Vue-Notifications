@@ -3,10 +3,13 @@
         <div class="card-body">
             <h5 class="card-title">{{ reminder.message }}</h5>
             <p class="card-text">Número: {{ reminder.phoneNumber }}</p>
+            <p class="card-text">Data e Hora: {{ reminder.dateTime }}</p>
             <p class="card-text">Humor: {{ reminder.mood }}</p>
             <div class="btn-container">
                 <button class="btn btn-primary" @click="sendReminder">Enviar</button>
-                <button class="btn btn-danger" @click="deleteReminder">Excluir</button>
+                <button class="btn btn-danger" @click="deleteReminder">
+                    <i class="bi bi-trash"></i> Excluir
+                </button>
             </div>
         </div>
     </div>
@@ -50,12 +53,17 @@ export default {
 <style scoped>
 .card {
     margin: 10px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: scale(1.02);
 }
 
 .card-body {
-    padding: 15px;
+    padding: 20px;
 }
 
 .btn-container {

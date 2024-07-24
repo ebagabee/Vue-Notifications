@@ -72,3 +72,13 @@ export default {
     }
 };
 </script>
+
+<style scoped>
+.modal-dialog {
+    max-width: 500px;
+}
+
+.modal-content {
+    border-radius: 10px;
+}
+</style>
