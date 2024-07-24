@@ -22,9 +22,10 @@
                             <div class="mb-3">
                                 <label for="mood" class="form-label">Humor:</label>
                                 <select v-model="mood" id="mood" class="form-select" required>
-                                    <option value="bobEsponja">Bob Esponja</option>
-                                    <option value="seuSirigueijo">Seu Sirigueijo</option>
-                                    <option value="darthVader">Darth Vader</option>
+                                    <option value="Bob Esponja">Bob Esponja</option>
+                                    <option value="Seu Siriguejo">Seu Sirigueijo</option>
+                                    <option value="Darth Vader">Darth Vader</option>
+                                    <option value="Scooby Doo">Scooby Doo</option>
                                 </select>
                             </div>
                             <button type="submit" class="btn btn-primary">Adicionar Lembrete</button>
