@@ -68,3 +68,4 @@ export default {
   margin: 0 10px;
 }
 </style>
+  
