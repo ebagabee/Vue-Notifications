@@ -35,7 +35,7 @@ export default {
     },
     methods: {
         async sendReminder() {
-            this.$emit('show-loading', true); // Emitir evento para mostrar o loading
+            this.$emit('show-loading', true);
             try {
                 await axios.post('http://localhost:8000/api/send-reminder', {
                     message: this.reminder.message,
@@ -47,7 +47,7 @@ export default {
                 console.error('Erro ao enviar mensagem:', error);
                 this.$emit('show-notification', { message: 'Falha ao enviar mensagem', type: 'error' });
             } finally {
-                this.$emit('show-loading', false); // Emitir evento para ocultar o loading
+                this.$emit('show-loading', false);
             }
         },
         async deleteReminder() {

@@ -13,7 +13,8 @@
     "bootstrap": "^5.3.3",
     "moment": "^2.30.1",
     "vue": "^3.4.31",
-    "vue-router": "^4.4.0"
+    "vue-router": "^4.4.0",
+    "vue-the-mask": "^0.11.1"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.5",

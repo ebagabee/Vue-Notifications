@@ -8,7 +8,7 @@
     <div class="container mt-4">
       <div class="row">
         <div class="col-md-12">
-          <DateFilter @filter-applied="applyDateFilter" />
+          <DateFilter @filter-applied="applyDateFilter" @filter-cleared="clearFilters"/>
         </div>
       </div>
     </div>
@@ -39,12 +39,12 @@ export default {
     return {
       showModal: false,
       currentPage: 1,
-      itemsPerPage: 15,
+      itemsPerPage: 12,
       startDate: null,
       endDate: null,
       isLoading: false,
       notificationMessage: '',
-      notificationType: 'info', // Pode ser 'success', 'error', 'info'
+      notificationType: 'info',
     };
   },
   methods: {
@@ -61,6 +61,12 @@ export default {
       this.endDate = endDate;
       this.fetchReminders();
     },
+    clearFilters() {
+      this.startDate = null;
+      this.endDate = null;
+      this.currentPage = 1;
+      this.fetchReminders();
+    },
     handlePageChange(page) {
       this.currentPage = page;
       this.fetchReminders();
@@ -70,10 +76,10 @@ export default {
     },
     showNotification({ message, type }) {
       this.notificationMessage = message;
-      this.notificationType = type; // 'success' ou 'error'
+      this.notificationType = type; 
       setTimeout(() => {
         this.notificationMessage = '';
-      }, 3000); // Duração da notificação
+      }, 3000); 
     }
   }
 };

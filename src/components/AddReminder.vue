@@ -16,7 +16,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="phoneNumber" class="form-label">Número de Telefone:</label>
-                                <input v-model="phoneNumber" id="phoneNumber" type="text" class="form-control"
+                                <input v-mask="'+55 (##) #####-####'" v-model="phoneNumber" id="phoneNumber" type="text" class="form-control"
                                     required />
                             </div>
                             <div class="mb-3">

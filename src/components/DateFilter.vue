@@ -5,6 +5,7 @@
         <label for="end-date">Data Fim:</label>
         <input type="date" id="end-date" v-model="endDate" class="form-control" />
         <button @click="applyFilter" class="btn btn-secondary">Aplicar Filtro</button>
+        <button @click="clearFilters" class="btn btn-secundary">Remover Filtros</button>
     </div>
 </template>
 
@@ -19,6 +20,11 @@ export default {
     methods: {
         applyFilter() {
             this.$emit('filter-applied', this.startDate, this.endDate);
+        },
+        clearFilters() {
+            this.startDate = '';
+            this.endDate = '';
+            this.$emit('filter-cleared');
         }
     }
 };

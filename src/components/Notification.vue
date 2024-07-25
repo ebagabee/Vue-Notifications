@@ -13,7 +13,7 @@ export default {
         },
         type: {
             type: String,
-            default: 'info' // Pode ser 'success' ou 'error'
+            default: 'info'
         }
     },
     computed: {
