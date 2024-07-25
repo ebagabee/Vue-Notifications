@@ -3,7 +3,7 @@
         <div class="card-body">
             <h5 class="card-title">{{ reminder.message }}</h5>
             <p class="card-text">Número: {{ reminder.phoneNumber }}</p>
-            <p class="card-text">Data e Hora: {{ reminder.dateTime }}</p>
+            <p class="card-text">Data e Hora: {{ formattedDateTime }}</p>
             <p class="card-text">Humor: {{ reminder.mood }}</p>
             <div class="btn-container">
                 <button class="btn btn-primary" @click="sendReminder">Enviar</button>
@@ -22,28 +22,42 @@ export default {
     props: {
         reminder: Object
     },
+    computed: {
+        formattedDateTime() {
+            const date = new Date(this.reminder.dateTime);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            return `${day}/${month}/${year} ${hours}:${minutes}`;
+        }
+    },
     methods: {
         async sendReminder() {
+            this.$emit('show-loading', true); // Emitir evento para mostrar o loading
             try {
                 await axios.post('http://localhost:8000/api/send-reminder', {
                     message: this.reminder.message,
                     phoneNumber: this.reminder.phoneNumber,
                     character: this.reminder.mood
                 });
-                alert('Mensagem enviada com sucesso');
+                this.$emit('show-notification', { message: 'Mensagem enviada com sucesso', type: 'success' });
             } catch (error) {
                 console.error('Erro ao enviar mensagem:', error);
-                alert('Falha ao enviar mensagem');
+                this.$emit('show-notification', { message: 'Falha ao enviar mensagem', type: 'error' });
+            } finally {
+                this.$emit('show-loading', false); // Emitir evento para ocultar o loading
             }
         },
         async deleteReminder() {
             try {
                 await axios.delete(`http://localhost:8000/api/reminder/${this.reminder.id}`);
                 this.$emit('reminder-deleted', this.reminder.id);
-                alert('Lembrete excluído com sucesso');
+                this.$emit('show-notification', { message: 'Lembrete excluído com sucesso', type: 'success' });
             } catch (error) {
                 console.error('Erro ao excluir lembrete:', error);
-                alert('Falha ao excluir lembrete');
+                this.$emit('show-notification', { message: 'Falha ao excluir lembrete', type: 'error' });
             }
         }
     }

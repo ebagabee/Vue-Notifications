@@ -1,14 +1,10 @@
 <template>
   <div id="app">
-    <!-- Modal para adicionar lembrete -->
-    <AddReminder v-if="showModal" @reminder-added="fetchReminders" @close="showModal = false" />
-
-    <!-- Botão para adicionar novo lembrete -->
+    <AddReminder v-if="showModal" @reminder-added="fetchReminders" @close="showModal = false"
+      @show-loading="handleLoading" @show-notification="showNotification" />
     <button type="button" class="btn btn-primary mt-3" @click="showModal = true">
       Adicionar Novo Lembrete
     </button>
-
-    <!-- Filtro de data -->
     <div class="container mt-4">
       <div class="row">
         <div class="col-md-12">
@@ -16,10 +12,11 @@
         </div>
       </div>
     </div>
-
-    <!-- Lista de lembretes -->
     <ReminderList ref="remindersList" :current-page="currentPage" :items-per-page="itemsPerPage" :start-date="startDate"
-      :end-date="endDate" @page-changed="handlePageChange" />
+      :end-date="endDate" @page-changed="handlePageChange" @show-loading="handleLoading"
+      @show-notification="showNotification" />
+    <LoadingSpinner :isLoading="isLoading" />
+    <Notification v-if="notificationMessage" :message="notificationMessage" :type="notificationType" />
   </div>
 </template>
 
@@ -27,12 +24,16 @@
 import ReminderList from './components/ReminderList.vue';
 import AddReminder from './components/AddReminder.vue';
 import DateFilter from './components/DateFilter.vue';
+import LoadingSpinner from './components/LoadingSpinner.vue';
+import Notification from './components/Notification.vue';
 
 export default {
   components: {
     ReminderList,
     AddReminder,
-    DateFilter
+    DateFilter,
+    LoadingSpinner,
+    Notification
   },
   data() {
     return {
@@ -40,12 +41,20 @@ export default {
       currentPage: 1,
       itemsPerPage: 15,
       startDate: null,
-      endDate: null
+      endDate: null,
+      isLoading: false,
+      notificationMessage: '',
+      notificationType: 'info', // Pode ser 'success', 'error', 'info'
     };
   },
   methods: {
-    fetchReminders() {
-      this.$refs.remindersList.fetchReminders();
+    async fetchReminders() {
+      this.isLoading = true;
+      try {
+        await this.$refs.remindersList.fetchReminders();
+      } finally {
+        this.isLoading = false;
+      }
     },
     applyDateFilter(startDate, endDate) {
       this.startDate = startDate;
@@ -55,6 +64,16 @@ export default {
     handlePageChange(page) {
       this.currentPage = page;
       this.fetchReminders();
+    },
+    handleLoading(state) {
+      this.isLoading = state;
+    },
+    showNotification({ message, type }) {
+      this.notificationMessage = message;
+      this.notificationType = type; // 'success' ou 'error'
+      setTimeout(() => {
+        this.notificationMessage = '';
+      }, 3000); // Duração da notificação
     }
   }
 };
